@@ -23,3 +23,14 @@ export const numarPeTara = (list) =>
 
 // orodoneaza descrescator dupa zile pe o copie a listei ca să nu o modifice
 export const sortDupaZile = (list) => [...list].sort((a, b) => b.zile - a.zile)
+
+
+// Inverseaza proprietatea vizitat a destinației cu ids-ul dat (fără a modifica retul obiectelor)
+export const marcheazaVizitat = (list, id) =>
+  list.map((d) => (d.id === id ? { ...d, vizitat: !d.vizitat } : d))
+
+// Adauga o destinatie nouă la finalul listei folosind spread
+export const adaugaDestinatie = (list, d) => [...list, d]
+
+// sterge destinatia cu id-ul dat returnand o lista filtrata
+export const stergeDestinatie = (list, id) => list.filter((d) => d.id !== id)
