@@ -22,6 +22,7 @@ import {
   adaugaDestinatie,
   stergeDestinatie,
 } from './utils/destinatii.js'
+import { fetchUsers, fetchUserById } from './api/orase.js'
 
 // --- Exercițiul 1 ---
 console.log('L2 Ex. 1 orașe:', getOrase(destinatii))
@@ -42,3 +43,24 @@ console.log('L2 Ex. 2 după adăugare: original', destinatii.length, ', listă n
 
 const dupaStergere = stergeDestinatie(dupaAdaugare, '7')
 console.log('L2 Ex. 2 după ștergere:', dupaStergere.length)
+
+// --- Exercițiul 3 ---
+async function loadOrase() {
+  try {
+    const users = await fetchUsers()
+    console.log('L2 Ex. 3 am primit', users.length, 'utilizatori')
+
+    const orase = users.map((user) => user.address.city)
+    console.log('L2 Ex. 3 orașe:', orase)
+
+    const numeLungi = orase.filter((oras) => oras.length > 10)
+    console.log('L2 Ex. 3 nume mai lungi de 10 caractere:', numeLungi.length)
+
+    const user1 = await fetchUserById(1)
+    console.log('L2 Ex. 3 orașul utilizatorului 1:', user1.address.city)
+  } catch (error) {
+    console.error('L2 Ex. 3 nu am putut încărca datele:', error.message)
+  }
+}
+
+loadOrase()
