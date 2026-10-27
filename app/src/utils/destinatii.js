@@ -7,7 +7,7 @@ export const getNevizitate = (list) => list.filter((d) => !d.vizitat)
 //  suma totală a zilelor folosind reduce cu pornire 0
 export const totalZile = (list) => list.reduce((total, d) => total + d.zile, 0)
 
-// fomrateaza un singur obiect (destructuring, template literals, ternar)
+// fomrateaza un singur obiect (destructuring, template literals    ternar)
 export const formatDestinatie = ({ oras, tara, zile, vizitat }) =>
   `[${vizitat ? 'x' : ' '}] ${oras}, ${tara} (${zile} zile)`
 
@@ -29,7 +29,7 @@ export const sortDupaZile = (list) => [...list].sort((a, b) => b.zile - a.zile)
 export const marcheazaVizitat = (list, id) =>
   list.map((d) => (d.id === id ? { ...d, vizitat: !d.vizitat } : d))
 
-// Adauga o destinatie nouă la finalul listei folosind spread
+// Adauga o destinatie noua la finalul listei folosind spread
 export const adaugaDestinatie = (list, d) => [...list, d]
 
 // sterge destinatia cu id-ul dat returnand o lista filtrata
