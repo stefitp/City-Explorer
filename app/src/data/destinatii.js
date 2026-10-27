@@ -5,4 +5,4 @@ export const destinatii = [
   { id: '4', oras: 'Brașov', tara: 'România', zile: 2, vizitat: true },
   { id: '5', oras: 'Kyoto', tara: 'Japonia', zile: 6, vizitat: false },
   { id: '6', oras: 'Tokyo', tara: 'Japonia', zile: 5, vizitat: false },
-]
+];

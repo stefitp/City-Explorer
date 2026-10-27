@@ -1,19 +1,14 @@
-import DestinatieCard from './DestinatieCard.jsx'
-
-export default function ListaDestinatii({ destinatii, onToggle }) {
-  if (!destinatii || destinatii.length === 0) {
-    return <p className="info">Nu există nicio destinație.</p>
-  }
+export default function DestinatieCard({ destinatie, onToggle }) {
+  const { id, oras, tara, zile, vizitat } = destinatie
 
   return (
-    <div className="lista">
-      {destinatii.map((destinatie) => (
-        <DestinatieCard
-          key={destinatie.id}
-          destinatie={destinatie}
-          onToggle={onToggle}
-        />
-      ))}
-    </div>
+    <article className={vizitat ? 'card vizitat' : 'card'}>
+      <h3>{oras}</h3>
+      <p className="tara">{tara}</p>
+      <p className="zile">{zile} zile</p>
+      <button type="button" onClick={() => onToggle && onToggle(id)}>
+        {vizitat ? 'Vizitat' : 'Marchează vizitat'}
+      </button>
+    </article>
   )
 }
