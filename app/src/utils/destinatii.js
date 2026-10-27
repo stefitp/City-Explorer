@@ -4,3 +4,5 @@ export const totalZile = (list) => list.reduce((total, d) => total + d.zile, 0)
 export const marcheazaVizitat = (list, id) =>
   list.map((d) => (d.id === id ? { ...d, vizitat: !d.vizitat } : d))
 export const adaugaDestinatie = (list, destinatie) => [...list, destinatie]
+
+export const stergeDestinatie = (list, id) => list.filter((d) => d.id !== id)

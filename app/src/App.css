@@ -85,3 +85,12 @@ button {
 .card.vizitat button {
   background: #16a34a;
 }
+
+.card button.btn-delete {
+  margin-top: 0.5rem;
+  background: #dc2626;
+}
+
+.card button.btn-delete:hover {
+  background: #b91c1c;
+}

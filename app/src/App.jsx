@@ -5,6 +5,7 @@ import {
   totalZile,
   marcheazaVizitat,
   adaugaDestinatie,
+  stergeDestinatie,
 } from './utils/destinatii.js'
 import Rezumat from './components/Rezumat.jsx'
 import FormularDestinatie from './components/FormularDestinatie.jsx'
@@ -22,6 +23,10 @@ export default function App() {
     setDestinatii((curent) => adaugaDestinatie(curent, nouaDestinatie))
   }
 
+  function handleDelete(id) {
+    setDestinatii((curent) => stergeDestinatie(curent, id))
+  }
+
   const total = destinatii.length
   const nevizitate = getNevizitate(destinatii).length
   const zile = totalZile(getNevizitate(destinatii))
@@ -31,7 +36,11 @@ export default function App() {
       <h1>City Explorer</h1>
       <Rezumat total={total} nevizitate={nevizitate} zile={zile} />
       <FormularDestinatie onAdd={handleAdd} />
-      <ListaDestinatii destinatii={destinatii} onToggle={handleToggle} />
+      <ListaDestinatii
+        destinatii={destinatii}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+      />
     </main>
   )
 }
