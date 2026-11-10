@@ -1,11 +1,12 @@
-const API_URL = 'http://localhost:3001'
+const API_URL = 'http://localhost:3002'
 
-export async function getDestinatiiPaginat(pagina = 1, perPage = 20) {
-  const response = await fetch(`http://localhost:3002/destinatii?_page=${pagina}&_per_page=${perPage}`)
+// Funcția cerută la Exercițiul 5c: primește pagina (implicit 1) și cere 20 de elemente
+export async function getDestinatii(pagina = 1) {
+  const response = await fetch(`${API_URL}/destinatii?_page=${pagina}&_per_page=20`)
   if (!response.ok) {
     throw new Error(`Serverul a răspuns cu ${response.status}`)
   }
-  return response.json() // întoarce { pages, items, data, first, next, ... }
+  return response.json()
 }
 
 export async function postDestinatie(destinatie) {
