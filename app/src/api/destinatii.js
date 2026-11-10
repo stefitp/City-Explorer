@@ -1,11 +1,11 @@
 const API_URL = 'http://localhost:3001'
 
-export async function getDestinatii() {
-  const response = await fetch(`${API_URL}/destinatii`)
+export async function getDestinatiiPaginat(pagina = 1, perPage = 20) {
+  const response = await fetch(`http://localhost:3002/destinatii?_page=${pagina}&_per_page=${perPage}`)
   if (!response.ok) {
     throw new Error(`Serverul a răspuns cu ${response.status}`)
   }
-  return response.json()
+  return response.json() // întoarce { pages, items, data, first, next, ... }
 }
 
 export async function postDestinatie(destinatie) {

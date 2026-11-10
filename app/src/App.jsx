@@ -14,11 +14,19 @@ export default function App() {
   const [seTrimite, setSeTrimite] = useState(false)
   const [cautare, setCautare] = useState('')
 
+  // Stări pentru paginare (Exercițiul 5c)
+  const [pagina, setPagina] = useState(1)
+  const [totalPagini, setTotalPagini] = useState(1)
+
+  // Încărcarea re-executată la fiecare schimbare a stării pagina
   useEffect(() => {
     async function incarca() {
+      setIncarcare(true)
       try {
-        const date = await getDestinatii()
-        setDestinatii(date)
+        const rezultat = await getDestinatii(pagina)
+        // json-server paginat returnează { pages, data, ... }
+        setDestinatii(rezultat.data)
+        setTotalPagini(rezultat.pages)
       } catch (err) {
         setEroare(err.message)
       } finally {
@@ -26,21 +34,24 @@ export default function App() {
       }
     }
     incarca()
-  }, [])
+  }, [pagina])
 
+  // Marcarea unei destinații pe server cu PATCH
   async function handleToggle(id) {
     const tinta = destinatii.find((d) => d.id === id)
     if (!tinta) return
+
     try {
       const salvata = await patchVizitat(id, !tinta.vizitat)
       setDestinatii((curent) =>
         curent.map((d) => (d.id === id ? salvata : d))
       )
     } catch (err) {
-      alert(`Eroare: ${err.message}`)
+      alert(`Eroare la actualizare: ${err.message}`)
     }
   }
 
+  // Adăugarea unei destinații noi pe server cu POST
   async function handleAdd(destinatieNoua) {
     setSeTrimite(true)
     try {
@@ -48,16 +59,30 @@ export default function App() {
       setDestinatii((curent) => [...curent, salvata])
       return true
     } catch (err) {
-      alert(`Eroare: ${err.message}`)
+      alert(`Eroare la adăugare: ${err.message}`)
       return false
     } finally {
       setSeTrimite(false)
     }
   }
 
-  if (incarcare) return <main><p className="stare">Se încarcă destinațiile...</p></main>
-  if (eroare) return <main><p className="stare eroare">Nu am putut încărca datele: {eroare}</p></main>
+  if (incarcare && destinatii.length === 0) {
+    return (
+      <main>
+        <p className="stare">Se încarcă destinațiile...</p>
+      </main>
+    )
+  }
 
+  if (eroare) {
+    return (
+      <main>
+        <p className="stare eroare">Nu am putut încărca datele: {eroare}</p>
+      </main>
+    )
+  }
+
+  // Calculele pentru rezumat (lucrează pe pagina curentă în varianta paginată)
   const nevizitate = getNevizitate(destinatii)
   const text = cautare.trim().toLowerCase()
   const afisate = destinatii.filter(
@@ -77,6 +102,7 @@ export default function App() {
       <FormularDestinatie onAdd={handleAdd} seTrimite={seTrimite} />
       <Cautare valoare={cautare} onChange={setCautare} />
 
+      {/* Mesaje pentru lista goală conform Exercițiului 3c */}
       {destinatii.length === 0 ? (
         <p className="gol">Nu există nicio destinație. Adaugă prima din formular.</p>
       ) : afisate.length === 0 ? (
@@ -84,6 +110,27 @@ export default function App() {
       ) : (
         <ListaDestinatii destinatii={afisate} onToggle={handleToggle} />
       )}
+
+      {/* Controalele de paginare: butoanele Înapoi, Înainte și textul N din M*/}
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', marginTop: '1.5rem' }}>
+        <button
+          type="button"
+          disabled={pagina === 1}
+          onClick={() => setPagina((p) => p - 1)}
+        >
+          Înapoi
+        </button>
+        <span>
+          pagina {pagina} din {totalPagini}
+        </span>
+        <button
+          type="button"
+          disabled={pagina === totalPagini}
+          onClick={() => setPagina((p) => p + 1)}
+        >
+          Înainte
+        </button>
+      </div>
     </main>
   )
 }
