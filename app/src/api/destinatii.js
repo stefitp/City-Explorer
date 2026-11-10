@@ -32,3 +32,13 @@ export async function patchVizitat(id, vizitat) {
   }
   return response.json()
 }
+
+export async function deleteDestinatie(id) {
+  const response = await fetch(`${API_URL}/destinatii/${id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) {
+    throw new Error(`Serverul a răspuns cu ${response.status}`)
+  }
+  return response.json()
+}

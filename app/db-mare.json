@@ -1,146 +1,6 @@
 {
   "destinatii": [
     {
-      "id": "1",
-      "oras": "Porto 1",
-      "tara": "Portugalia",
-      "zile": 2,
-      "vizitat": false
-    },
-    {
-      "id": "2",
-      "oras": "Faro 2",
-      "tara": "Portugalia",
-      "zile": 3,
-      "vizitat": false
-    },
-    {
-      "id": "3",
-      "oras": "Braga 3",
-      "tara": "Portugalia",
-      "zile": 4,
-      "vizitat": true
-    },
-    {
-      "id": "4",
-      "oras": "Coimbra 4",
-      "tara": "Portugalia",
-      "zile": 5,
-      "vizitat": false
-    },
-    {
-      "id": "5",
-      "oras": "Cluj-Napoca 5",
-      "tara": "România",
-      "zile": 6,
-      "vizitat": false
-    },
-    {
-      "id": "6",
-      "oras": "Brașov 6",
-      "tara": "România",
-      "zile": 7,
-      "vizitat": true
-    },
-    {
-      "id": "7",
-      "oras": "Sibiu 7",
-      "tara": "România",
-      "zile": 8,
-      "vizitat": false
-    },
-    {
-      "id": "8",
-      "oras": "Iași 8",
-      "tara": "România",
-      "zile": 9,
-      "vizitat": false
-    },
-    {
-      "id": "9",
-      "oras": "Timișoara 9",
-      "tara": "România",
-      "zile": 10,
-      "vizitat": true
-    },
-    {
-      "id": "10",
-      "oras": "Kyoto 10",
-      "tara": "Japonia",
-      "zile": 11,
-      "vizitat": false
-    },
-    {
-      "id": "11",
-      "oras": "Tokyo 11",
-      "tara": "Japonia",
-      "zile": 12,
-      "vizitat": false
-    },
-    {
-      "id": "12",
-      "oras": "Osaka 12",
-      "tara": "Japonia",
-      "zile": 13,
-      "vizitat": true
-    },
-    {
-      "id": "13",
-      "oras": "Nara 13",
-      "tara": "Japonia",
-      "zile": 14,
-      "vizitat": false
-    },
-    {
-      "id": "14",
-      "oras": "Kobe 14",
-      "tara": "Japonia",
-      "zile": 1,
-      "vizitat": false
-    },
-    {
-      "id": "15",
-      "oras": "Madrid 15",
-      "tara": "Spania",
-      "zile": 2,
-      "vizitat": true
-    },
-    {
-      "id": "16",
-      "oras": "Barcelona 16",
-      "tara": "Spania",
-      "zile": 3,
-      "vizitat": false
-    },
-    {
-      "id": "17",
-      "oras": "Sevilla 17",
-      "tara": "Spania",
-      "zile": 4,
-      "vizitat": false
-    },
-    {
-      "id": "18",
-      "oras": "Valencia 18",
-      "tara": "Spania",
-      "zile": 5,
-      "vizitat": true
-    },
-    {
-      "id": "19",
-      "oras": "Bilbao 19",
-      "tara": "Spania",
-      "zile": 6,
-      "vizitat": false
-    },
-    {
-      "id": "20",
-      "oras": "Roma 20",
-      "tara": "Italia",
-      "zile": 7,
-      "vizitat": false
-    },
-    {
       "id": "21",
       "oras": "Milano 21",
       "tara": "Italia",
@@ -4639,7 +4499,7 @@
       "oras": "Nara 663",
       "tara": "Japonia",
       "zile": 6,
-      "vizitat": true
+      "vizitat": false
     },
     {
       "id": "664",
@@ -4758,7 +4618,7 @@
       "oras": "Cluj-Napoca 680",
       "tara": "România",
       "zile": 9,
-      "vizitat": false
+      "vizitat": true
     },
     {
       "id": "681",
@@ -14000,5 +13860,6 @@
       "zile": 13,
       "vizitat": false
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

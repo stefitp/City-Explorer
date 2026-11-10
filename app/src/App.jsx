@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
-import { getDestinatii, patchVizitat, postDestinatie } from './api/destinatii.js'
+import {
+  getDestinatii,
+  patchVizitat,
+  postDestinatie,
+  deleteDestinatie,
+} from './api/destinatii.js'
 import { getNevizitate, totalZile } from './utils/destinatii.js'
 import Rezumat from './components/Rezumat.jsx'
 import ListaDestinatii from './components/ListaDestinatii.jsx'
@@ -14,17 +19,14 @@ export default function App() {
   const [seTrimite, setSeTrimite] = useState(false)
   const [cautare, setCautare] = useState('')
 
-  // Stări pentru paginare (Exercițiul 5c)
   const [pagina, setPagina] = useState(1)
   const [totalPagini, setTotalPagini] = useState(1)
 
-  // Încărcarea re-executată la fiecare schimbare a stării pagina
   useEffect(() => {
     async function incarca() {
       setIncarcare(true)
       try {
         const rezultat = await getDestinatii(pagina)
-        // json-server paginat returnează { pages, data, ... }
         setDestinatii(rezultat.data)
         setTotalPagini(rezultat.pages)
       } catch (err) {
@@ -36,7 +38,6 @@ export default function App() {
     incarca()
   }, [pagina])
 
-  // Marcarea unei destinații pe server cu PATCH
   async function handleToggle(id) {
     const tinta = destinatii.find((d) => d.id === id)
     if (!tinta) return
@@ -51,7 +52,6 @@ export default function App() {
     }
   }
 
-  // Adăugarea unei destinații noi pe server cu POST
   async function handleAdd(destinatieNoua) {
     setSeTrimite(true)
     try {
@@ -63,6 +63,15 @@ export default function App() {
       return false
     } finally {
       setSeTrimite(false)
+    }
+  }
+
+  async function handleDelete(id) {
+    try {
+      await deleteDestinatie(id)
+      setDestinatii((curent) => curent.filter((d) => d.id !== id))
+    } catch (err) {
+      alert(`Eroare la ștergere: ${err.message}`)
     }
   }
 
@@ -82,7 +91,6 @@ export default function App() {
     )
   }
 
-  // Calculele pentru rezumat (lucrează pe pagina curentă în varianta paginată)
   const nevizitate = getNevizitate(destinatii)
   const text = cautare.trim().toLowerCase()
   const afisate = destinatii.filter(
@@ -102,16 +110,18 @@ export default function App() {
       <FormularDestinatie onAdd={handleAdd} seTrimite={seTrimite} />
       <Cautare valoare={cautare} onChange={setCautare} />
 
-      {/* Mesaje pentru lista goală conform Exercițiului 3c */}
       {destinatii.length === 0 ? (
         <p className="gol">Nu există nicio destinație. Adaugă prima din formular.</p>
       ) : afisate.length === 0 ? (
         <p className="gol">Niciun rezultat pentru „{cautare}”.</p>
       ) : (
-        <ListaDestinatii destinatii={afisate} onToggle={handleToggle} />
+        <ListaDestinatii
+          destinatii={afisate}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+        />
       )}
 
-      {/* Controalele de paginare: butoanele Înapoi, Înainte și textul N din M*/}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'center', marginTop: '1.5rem' }}>
         <button
           type="button"
