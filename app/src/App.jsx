@@ -1,46 +1,58 @@
-import { useState } from 'react'
-import { destinatii as destinatiiInitiale } from './data/destinatii.js'
-import {
-  getNevizitate,
-  totalZile,
-  marcheazaVizitat,
-  adaugaDestinatie,
-  stergeDestinatie,
-} from './utils/destinatii.js'
+import { useState, useEffect } from 'react'
+import { getDestinatii, patchVizitat } from './api/destinatii.js'
+import { getNevizitate, totalZile } from './utils/destinatii.js'
 import Rezumat from './components/Rezumat.jsx'
-import FormularDestinatie from './components/FormularDestinatie.jsx'
 import ListaDestinatii from './components/ListaDestinatii.jsx'
+import FormularDestinatie from './components/FormularDestinatie.jsx'
 import './App.css'
 
 export default function App() {
-  const [destinatii, setDestinatii] = useState(destinatiiInitiale)
+  const [destinatii, setDestinatii] = useState([])
+  const [incarcare, setIncarcare] = useState(true)
+  const [eroare, setEroare] = useState(null)
 
-  function handleToggle(id) {
-    setDestinatii((curent) => marcheazaVizitat(curent, id))
+  useEffect(() => {
+    async function incarca() {
+      try {
+        const date = await getDestinatii()
+        setDestinatii(date)
+      } catch (err) {
+        setEroare(err.message)
+      } finally {
+        setIncarcare(false)
+      }
+    }
+    incarca()
+  }, [])
+
+  async function handleToggle(id) {
+    const tinta = destinatii.find((d) => d.id === id)
+    if (!tinta) return
+    try {
+      const salvata = await patchVizitat(id, !tinta.vizitat)
+      setDestinatii((curent) =>
+        curent.map((d) => (d.id === id ? salvata : d))
+      )
+    } catch (err) {
+      alert(`Eroare la actualizare: ${err.message}`)
+    }
   }
 
-  function handleAdd(nouaDestinatie) {
-    setDestinatii((curent) => adaugaDestinatie(curent, nouaDestinatie))
-  }
+  if (incarcare) return <main><p className="stare">Se încarcă destinațiile...</p></main>
+  if (eroare) return <main><p className="stare eroare">Nu am putut încărca datele: {eroare}</p></main>
 
-  function handleDelete(id) {
-    setDestinatii((curent) => stergeDestinatie(curent, id))
-  }
-
-  const total = destinatii.length
-  const nevizitate = getNevizitate(destinatii).length
-  const zile = totalZile(getNevizitate(destinatii))
+  const nevizitate = getNevizitate(destinatii)
 
   return (
     <main>
       <h1>City Explorer</h1>
-      <Rezumat total={total} nevizitate={nevizitate} zile={zile} />
-      <FormularDestinatie onAdd={handleAdd} />
-      <ListaDestinatii
-        destinatii={destinatii}
-        onToggle={handleToggle}
-        onDelete={handleDelete}
+      <Rezumat
+        total={destinatii.length}
+        nevizitate={nevizitate.length}
+        zile={totalZile(nevizitate)}
       />
+      <FormularDestinatie onAdd={() => {}} />
+      <ListaDestinatii destinatii={destinatii} onToggle={handleToggle} />
     </main>
   )
 }
