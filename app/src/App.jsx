@@ -4,6 +4,7 @@ import { getNevizitate, totalZile } from './utils/destinatii.js'
 import Rezumat from './components/Rezumat.jsx'
 import ListaDestinatii from './components/ListaDestinatii.jsx'
 import FormularDestinatie from './components/FormularDestinatie.jsx'
+import Cautare from './components/Cautare.jsx'
 import './App.css'
 
 export default function App() {
@@ -11,8 +12,8 @@ export default function App() {
   const [incarcare, setIncarcare] = useState(true)
   const [eroare, setEroare] = useState(null)
   const [seTrimite, setSeTrimite] = useState(false)
+  const [cautare, setCautare] = useState('')
 
-  // 1. Încărcarea datelor la pornirea aplicației (Exercițiul 1b)
   useEffect(() => {
     async function incarca() {
       try {
@@ -27,22 +28,19 @@ export default function App() {
     incarca()
   }, [])
 
-  // 2. Marcarea destinației pe server cu PATCH (Exercițiul 1c)
   async function handleToggle(id) {
     const tinta = destinatii.find((d) => d.id === id)
     if (!tinta) return
-
     try {
       const salvata = await patchVizitat(id, !tinta.vizitat)
       setDestinatii((curent) =>
         curent.map((d) => (d.id === id ? salvata : d))
       )
     } catch (err) {
-      alert(`Eroare la actualizarea destinației: ${err.message}`)
+      alert(`Eroare: ${err.message}`)
     }
   }
 
-  // 3. Adăugarea destinației noi pe server cu POST (Exercițiul 2c)
   async function handleAdd(destinatieNoua) {
     setSeTrimite(true)
     try {
@@ -50,32 +48,23 @@ export default function App() {
       setDestinatii((curent) => [...curent, salvata])
       return true
     } catch (err) {
-      alert(`Eroare la adăugarea destinației: ${err.message}`)
+      alert(`Eroare: ${err.message}`)
       return false
     } finally {
       setSeTrimite(false)
     }
   }
 
-  // Afișarea stării de încărcare (Exercițiul 1b)
-  if (incarcare) {
-    return (
-      <main>
-        <p className="stare">Se încarcă destinațiile...</p>
-      </main>
-    )
-  }
-
-  // Afișarea stării de eroare dacă serverul nu răspunde (Exercițiul 1b)
-  if (eroare) {
-    return (
-      <main>
-        <p className="stare eroare">Nu am putut încărca datele: {eroare}</p>
-      </main>
-    )
-  }
+  if (incarcare) return <main><p className="stare">Se încarcă destinațiile...</p></main>
+  if (eroare) return <main><p className="stare eroare">Nu am putut încărca datele: {eroare}</p></main>
 
   const nevizitate = getNevizitate(destinatii)
+  const text = cautare.trim().toLowerCase()
+  const afisate = destinatii.filter(
+    (d) =>
+      d.oras.toLowerCase().includes(text) ||
+      d.tara.toLowerCase().includes(text)
+  )
 
   return (
     <main>
@@ -86,7 +75,15 @@ export default function App() {
         zile={totalZile(nevizitate)}
       />
       <FormularDestinatie onAdd={handleAdd} seTrimite={seTrimite} />
-      <ListaDestinatii destinatii={destinatii} onToggle={handleToggle} />
+      <Cautare valoare={cautare} onChange={setCautare} />
+
+      {destinatii.length === 0 ? (
+        <p className="gol">Nu există nicio destinație. Adaugă prima din formular.</p>
+      ) : afisate.length === 0 ? (
+        <p className="gol">Niciun rezultat pentru „{cautare}”.</p>
+      ) : (
+        <ListaDestinatii destinatii={afisate} onToggle={handleToggle} />
+      )}
     </main>
   )
 }
